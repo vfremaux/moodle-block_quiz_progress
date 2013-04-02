@@ -1,0 +1,80 @@
+<table cellpadding="9" cellspacing="0">
+<?php 
+if (empty($this->config->quiztype)) $this->config->quiztype = 'quiz';
+?>
+<tr valign="top">
+    <td align="right">
+        <b><?php print_string('configquiztype', 'block_quiz_progress') ?>:</b>
+    </td>
+    <td>
+        <?php
+        	if (empty($CFG->block_quiz_progress_modules)) set_config('block_quiz_progress_modules', 'quiz');
+        	$quizmodules = explode(',', $CFG->block_quiz_progress_modules);
+            $options = array();
+        	foreach($quizmodules as $qmname){
+	        	if($quizmodule = get_record('modules', 'name', $qmname)){
+		            $options["$quizmodule->id"] = get_string('modulename', $qmname);
+		        }
+		    }
+            choose_from_menu($options, 'quiztype', empty($this->config->quiztype) ? 0 : $this->config->quiztype);
+        ?>
+    </td>
+</tr>
+<tr valign="top">
+    <td align="right">
+        <b><?php print_string('configselectquiz', 'block_quiz_progress') ?>:</b>
+    </td>
+    <td>
+        <?php
+        	$quiztypename = get_field('modules', 'name', 'id', $this->config->quiztype);
+            $quizzes = get_records($quiztypename, 'course', $this->instance->pageid, '', 'id, name');
+            if(empty($quizzes)) {
+                echo '<strong>'.get_string('config_no_quizzes_in_course', 'block_quiz_results').'</strong>';
+                echo '<p><input type="hidden" name="quizid" value="0" /></p>';
+            }
+            else {
+                $options = array();
+                foreach($quizzes as $quiz) {
+                    $options[$quiz->id] = $quiz->name;
+                }
+                choose_from_menu($options, 'quizid', empty($this->config->quizid) ? 0 : $this->config->quizid);
+            }
+        ?>
+    </td>
+</tr>
+<tr valign="top">
+    <td align="right">
+        <b><?php print_string('configgraphtype', 'block_quiz_progress') ?>:</b>
+    </td>
+    <td>
+        <?php
+            $options = array('bar' => get_string('bar', 'block_quiz_progress'), 'time' => get_string('time', 'block_quiz_progress'));
+            choose_from_menu($options, 'graphtype', empty($this->config->graphtype) ? 0 : $this->config->graphtype);
+        ?>
+    </td>
+</tr>
+<tr valign="top">
+    <td align="right">
+        <b><?php print_string('configgraphsize', 'block_quiz_progress') ?>:</b>
+    </td>
+    <td align="center">
+    	<table width="90%" cellpadding="9" cellspacing="0">
+    		<tr>
+    			<td>
+    				<?php print_string('width', 'block_quiz_progress') ?>
+    				<input type="text" maxlength="3" size="4" name="width" value="<?php p($this->config->width) ?>" />
+    			</td>
+    			<td>
+    				<?php print_string('height', 'block_quiz_progress') ?>
+    				<input type="text" maxlength="3" size="4" name="height" value="<?php p($this->config->height) ?>" />
+    			</td>
+    		</tr>
+    	</table>
+    </td>
+</tr>
+<tr>
+    <td colspan="2" align="center">
+        <input type="submit" value="<?php print_string('savechanges') ?>" />
+    </td>
+</tr>
+</table>
