@@ -1,7 +1,11 @@
 <?php
 
+// Capabilities
+$string['quiz_progress:addinstance'] = 'Peut ajouter une instance';
+
 $string['bar'] = 'Bargraph';
 $string['blockname'] = 'Progression de test';
+$string['pluginname'] = 'Progression de test';
 $string['configgraphsize'] = 'Dimensions';
 $string['configgraphtype'] = 'Type de graphe';
 $string['configquiztype'] = 'Type de test';
@@ -13,6 +17,7 @@ $string['errornojqplot'] = 'JQPlot n\'est pas installé dans ce Moodle. Contacte
 $string['errornoquiz'] = 'Aucun module de test dans ce cours';
 $string['errornoquizselected'] = 'Pas de module test à tracer. Choisissez en un.';
 $string['errornoquestions'] = 'Le test ne semble avoir aucune question.';
+$string['errornonexistantcoursemodule'] = 'Le module choisi n\'existe probablement plus.';
 $string['height'] = 'Hauteur';
 $string['noresultsyet'] = 'Vous n\'avez pas de résultats dans ce test. Aucun rapport ne peut être affiché.';
 $string['quizprogress'] = 'Vos progrès';
