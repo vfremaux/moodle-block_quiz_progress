@@ -17,18 +17,21 @@
 /**
  * Version details
  *
- * @package    block
- * @subpackage quiz_progress
- * version Moodle 2
+ * @package    block_quiz_progress
+ * @category   blocks
+ * @author Valery Fremaux <valery.fremaux@gmail.com>
  * @copyright  1999 onwards Martin Dougiamas (http://dougiamas.com)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @author Valery Fremaux (valery.fremaux@gmail.com)
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2013031401;        // The current plugin version (Date: YYYYMMDDXX)
+$plugin->version   = 2015032200;        // The current plugin version (Date: YYYYMMDDXX)
 $plugin->requires  = 2012120300;        // Requires this Moodle version
 $plugin->component = 'block_quiz_progress'; // Full name of the plugin (used for diagnostics)
-$plugin->release = '2.4.0 (Build 2013031400)';
-$plugin->maturity = MATURITY_BETA;
+$plugin->release = '2.7.0 (Build 2015032200)';
+$plugin->maturity = MATURITY_RC;
+$plugin->dependencies = array('local_vflibs' => 2015101800);
+
+// Non moodle attributes.
+$plugin->codeincrement = '2.7.0000';

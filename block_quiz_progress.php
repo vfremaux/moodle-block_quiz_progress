@@ -1,5 +1,29 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+defined('MOODLE_INTERNAL') || die();
+
+/**
+ * quiz progress block settings
+ *
+ * @package    block_quiz_progress
+ * @category   blocks
+ * @copyright  2010 Valery Fremaux (valery.fremaux@gmail.com)
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 global $PAGE;
 
 class block_quiz_progress extends block_base {
@@ -21,7 +45,7 @@ class block_quiz_progress extends block_base {
     function get_content() {
         global $USER, $CFG, $COURSE, $DB;
 
-        if ($this->content !== NULL) {
+        if ($this->content !== null) {
             return $this->content;
         }
 
@@ -102,7 +126,7 @@ class block_quiz_progress extends block_base {
         if (empty($attemptgrades)) {
             // No grades, sorry.
             // The block will hide itself in this case.
-            $this->content->text .= "<span class=\"notify\">".get_string('noresultsyet', 'block_quiz_progress')."</span>";
+            $this->content->text .= '<span class="notify">'.get_string('noresultsyet', 'block_quiz_progress').'</span>';
             return $this->content;
         }
 
@@ -182,8 +206,8 @@ class block_quiz_progress extends block_base {
         $htmlid = $htmlid.'_'.$instance;
         $instance++;
 
-        $content->text .= "<div id=\"$htmlid\" style=\"margin-top:20px; margin-left:20px; width:{$plotwidth}px; height:{$plotheigth}px;\"></div>";
-        $content->text .= "<script type=\"text/javascript\">\n";
+        $content->text .= '<div id="'.$htmlid.'" style="margin-top:20px; margin-left:20px; width:'.$plotwidth.'px; height:'.$plotheight.'px;"></div>';
+        $content->text .= '<script type="text/javascript">';
 
         $title = addslashes($title);
 
@@ -275,56 +299,13 @@ class block_quiz_progress extends block_base {
          $PLOTID++;
     }
 
-    static function check_jquery() {
-        global $PAGE, $OUTPUT, $CFG;
+    public function get_required_javascript() {
+        global $CFG, $PAGE;
 
-        if ($CFG->version >= 2013051400) return; // Moodle 2.5 natively loads JQuery
+        parent::get_required_javascript();
 
-        $current = '1.9.1';
-
-        if (empty($OUTPUT->jqueryversion)) {
-            $OUTPUT->jqueryversion = '1.9.1';
-            $PAGE->requires->js('/blocks/quiz_progress/js/jqplot/jquery-'.$current.'.min.js', true);
-        } else {
-            if ($OUTPUT->jqueryversion < $current) {
-                debugging('the previously loaded version of jquery is lower than required. This may cause issues to quiz_progress. Programmers might consider upgrading JQuery version in the component that preloads JQuery library.', DEBUG_DEVELOPER, array('notrace'));
-            }
-        }
+        $PAGE->requires->jquery_plugin('jqplotjquery', 'local_vflibs');
+        $PAGE->requires->jquery_plugin('jqplot', 'local_vflibs');
     }
 
-    static function check_jqplot() {
-        global $JQPLOT, $PAGE;
-
-        if (empty($JQPLOT)) {
-            $JQPLOT = array();
-        }
-
-        if (!in_array('jquery', $JQPLOT)) {
-            $PAGE->requires->js('/blocks/quiz_progress//js/jqplot/jquery.jqplot.js', true);
-            $JQPLOT[] = 'jquery';
-        }
-
-        if (!in_array('excanvas', $JQPLOT)) {
-            $PAGE->requires->js('/blocks/quiz_progress//js/jqplot/excanvas.js', true);
-            $JQPLOT[] = 'excanvas';
-        }
-
-        if (!in_array('dateAxisRenderer', $JQPLOT)) {
-            $PAGE->requires->js('/blocks/quiz_progress//js/jqplot/plugins/jqplot.dateAxisRenderer.js', true);
-            $JQPLOT[] = 'dateAxisRenderer';
-        }
-
-        if (!in_array('barRenderer', $JQPLOT)) {
-            $PAGE->requires->js('/blocks/quiz_progress//js/jqplot/plugins/jqplot.barRenderer.min.js', true);
-            $JQPLOT[] = 'barRenderer';
-        }
-
-        if (!in_array('categoryAxisRenderer', $JQPLOT)) {
-            $PAGE->requires->js('/blocks/quiz_progress//js/jqplot/plugins/jqplot.categoryAxisRenderer.min.js', true);
-            $JQPLOT[] = 'categoryAxisRenderer';
-        }
-    }
 }
-
-block_quiz_progress::check_jquery();
-block_quiz_progress::check_jqplot();

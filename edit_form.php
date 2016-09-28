@@ -14,14 +14,17 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+defined('MOODLE_INTERNAL') || die();
+
 /**
  * minimalistic edit form
  *
  * @package   block_quiz_progress
- * @copyright 2013 Valery Fremaux / valery.fremaux@gmail.com
+ * @category  blocks
+ * @copyright 2013 Valery Fremaux <valery.fremaux@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-defined('MOODLE_INTERNAL') || die();
+
 require_once($CFG->libdir.'/formslib.php');
 
 class block_quiz_progress_edit_form extends block_edit_form {
@@ -31,14 +34,17 @@ class block_quiz_progress_edit_form extends block_edit_form {
     protected function specific_definition($mform) {
         global $CFG, $DB, $COURSE;
 
+        $globalconfig = get_config('block_quiz_progress');
+
         $mform->addElement('header', 'configheader', get_string('blocksettings', 'block'));
 
-		$quiztypestr = get_string('configquiztype', 'block_quiz_progress');
+        $quiztypestr = get_string('configquiztype', 'block_quiz_progress');
 
-    	if (empty($CFG->block_quiz_progress_modules)) {
-            set_config('block_quiz_progress_modules', 'quiz');
+        if (empty($globalconfig->modules)) {
+            set_config('modules', 'quiz', 'block_quiz_progress');
+            $globalconfig->modules = 'quiz';
         }
-    	$quizmodules = explode(',', $CFG->block_quiz_progress_modules);
+        $quizmodules = explode(',', $globalconfig->modules);
         $options = array();
         foreach ($quizmodules as $qmname) {
             if ($quizmodule = $DB->get_record('modules', array('name' => $qmname))) {
@@ -48,37 +54,38 @@ class block_quiz_progress_edit_form extends block_edit_form {
 
         $mform->addElement('select', 'config_quiztype', $quiztypestr, $options);
 
-		$config = unserialize(base64_decode(@$this->block->instance->configdata));
-		
-		if (!empty($config->quiztype)){
+        $config = unserialize(base64_decode(@$this->block->instance->configdata));
 
-			$quizidstr = get_string('configselectquiz', 'block_quiz_progress');
-	    	$quiztype = $DB->get_record('modules', array('id' => $config->quiztype));
+        if (empty($config->quiztype)) {
+            $config->quiztype = $DB->get_field('modules', 'id', array('name' => array_pop($quizmodules)));
+        }
 
-	        $quizzes = $DB->get_records($quiztype->name, array('course' => $COURSE->id), '', 'id, name');
-	        if(empty($quizzes)) {
-	        	$mform->addElement('static', 'config_quizid_static', $quizidstr, get_string('config_no_quizzes_in_course', 'block_quiz_results'));
-	        	$mform->addElement('hidden', 'config_quizid', 0);
-	        	$mform->setType('config_quizid', PARAM_INT);
-	        } else {
-	            $options = array();
-	            foreach($quizzes as $quiz) {
-	            	$cmidnumber = $DB->get_field('course_modules', 'idnumber', array('module' => $quiztype->id, 'instance' => $quiz->id));
-	                $options[$quiz->id] = (empty($cmidnumber)) ? $quiz->name : $quiz->name.' ('.$cmidnumber.')' ;
-	            }
-	        	$mform->addElement('select', 'config_quizid', $quizidstr, $options);
-	        }
-	    }
+        $quizidstr = get_string('configselectquiz', 'block_quiz_progress');
+        $quiztype = $DB->get_record('modules', array('id' => $config->quiztype));
 
-		$graphtypestr = get_string('configgraphsize', 'block_quiz_progress');
+        $quizzes = $DB->get_records($quiztype->name, array('course' => $COURSE->id), '', 'id, name');
+        if (empty($quizzes)) {
+            $mform->addElement('static', 'config_quizid_static', $quizidstr, get_string('config_no_quizzes_in_course', 'block_quiz_results'));
+            $mform->addElement('hidden', 'config_quizid', 0);
+            $mform->setType('config_quizid', PARAM_INT);
+        } else {
+            $options = array();
+            foreach($quizzes as $quiz) {
+                $cmidnumber = $DB->get_field('course_modules', 'idnumber', array('module' => $quiztype->id, 'instance' => $quiz->id));
+                $options[$quiz->id] = (empty($cmidnumber)) ? $quiz->name : $quiz->name.' ('.$cmidnumber.')' ;
+            }
+            $mform->addElement('select', 'config_quizid', $quizidstr, $options);
+        }
+
+        $graphtypestr = get_string('configgraphsize', 'block_quiz_progress');
         $options = array('bar' => get_string('bar', 'block_quiz_progress'), 'time' => get_string('time', 'block_quiz_progress'));
-    	$mform->addElement('select', 'config_graphtype', $graphtypestr, $options);
+        $mform->addElement('select', 'config_graphtype', $graphtypestr, $options);
 
-    	$mform->addElement('text', 'config_width', get_string('width', 'block_quiz_progress'), array('size' => '4'));
-    	$mform->setType('config_width', PARAM_INT);
+        $mform->addElement('text', 'config_width', get_string('width', 'block_quiz_progress'), array('size' => '4'));
+        $mform->setType('config_width', PARAM_INT);
 
-    	$mform->addElement('text', 'config_height', get_string('height', 'block_quiz_progress'), array('size' => '4'));
-    	$mform->setType('config_height', PARAM_INT);
+        $mform->addElement('text', 'config_height', get_string('height', 'block_quiz_progress'), array('size' => '4'));
+        $mform->setType('config_height', PARAM_INT);
 
     }
 }
