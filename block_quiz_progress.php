@@ -45,7 +45,7 @@ class block_quiz_progress extends block_base {
     function get_content() {
         global $USER, $CFG, $COURSE, $DB;
 
-        if ($this->content !== null) {
+        if ($this->content !== NULL) {
             return $this->content;
         }
 
@@ -126,7 +126,7 @@ class block_quiz_progress extends block_base {
         if (empty($attemptgrades)) {
             // No grades, sorry.
             // The block will hide itself in this case.
-            $this->content->text .= '<span class="notify">'.get_string('noresultsyet', 'block_quiz_progress').'</span>';
+            $this->content->text .= "<span class=\"notify\">".get_string('noresultsyet', 'block_quiz_progress')."</span>";
             return $this->content;
         }
 
