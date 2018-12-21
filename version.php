@@ -27,11 +27,21 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->version   = 2015032200;        // The current plugin version (Date: YYYYMMDDXX).
+<<<<<<< HEAD
 $plugin->requires  = 2018042700;        // Requires this Moodle version.
 $plugin->component = 'block_quiz_progress'; // Full name of the plugin (used for diagnostics).
 $plugin->release = '3.5.0 (Build 2015032200)';
+=======
+$plugin->requires  = 2018112800;        // Requires this Moodle version.
+$plugin->component = 'block_quiz_progress'; // Full name of the plugin (used for diagnostics).
+$plugin->release = '3.6.0 (Build 2015032200)';
+>>>>>>> MOODLE_36_STABLE
 $plugin->maturity = MATURITY_STABLE;
 $plugin->dependencies = array('local_vflibs' => 2015101800);
 
 // Non moodle attributes.
+<<<<<<< HEAD
 $plugin->codeincrement = '3.5.0000';
+=======
+$plugin->codeincrement = '3.6.0000';
+>>>>>>> MOODLE_36_STABLE
