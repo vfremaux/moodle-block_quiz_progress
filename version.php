@@ -18,7 +18,6 @@
  * Version details
  *
  * @package    block_quiz_progress
- * @category   blocks
  * @author Valery Fremaux <valery.fremaux@gmail.com>
  * @copyright  1999 onwards Martin Dougiamas (http://dougiamas.com)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -26,13 +25,12 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2015032200;        // The current plugin version (Date: YYYYMMDDXX).
-$plugin->requires  = 2022041200;        // Requires this Moodle version.
+$plugin->version   = 2025011400;        // The current plugin version (Date: YYYYMMDDXX).
+$plugin->requires  = 2019111200;        // Requires this Moodle version.
 $plugin->component = 'block_quiz_progress'; // Full name of the plugin (used for diagnostics).
-$plugin->release = '4.0.0 (Build 2015032200)';
+$plugin->release = '4.5.0 (Build 2025011400)';
 $plugin->maturity = MATURITY_STABLE;
-$plugin->dependencies = array('local_vflibs' => 2015101800);
-$plugin->supported = [40,40];
+$plugin->dependencies = ['local_vflibs' => 2015101800];
 
 // Non moodle attributes.
-$plugin->codeincrement = '4.0.0000';
+$plugin->codeincrement = '4.5.0000';
